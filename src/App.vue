@@ -1,0 +1,124 @@
+  <template>
+  <div class="app">
+    <drop-zone v-if="isShowDropZone" @fileLoad="handlerFileLoad" />
+    <div class="app__container" v-else>
+      <table-parametrs :parametrs="parametrs" />
+    </div>
+  </div>
+</template>
+
+<script>
+import { NAME_STRING, NAME_STRING_START, NUMBER_CLEAR, NUMBER_STRING, STRING_WITH_NUMBER_PLUS_STATUS } from './constants/regEx';
+import DropZone from "./components/DropZone.vue";
+import TableParametrs from "./components/TableParametrs.vue";
+
+export default {
+  name: "vue-comp",
+  components: {
+    "drop-zone": DropZone,
+    "table-parametrs": TableParametrs,
+  },
+  data() {
+    return {
+      protocol: "",
+    };
+  },
+  mounted() {
+    document.addEventListener("dragover", (event) => event.preventDefault());
+    document.addEventListener("drop", (event) => event.preventDefault());
+  },
+  computed: {
+    isShowDropZone() {
+      return !this.protocol;
+    },
+    parametrs() {
+      const protocolSplitObjectsParams =
+        this.protocolWhereParamsAsString.reduce((acc, item) => {
+          const objParametr = this.createObjectParametr(item);
+          acc.push(objParametr);
+          return acc;
+        }, []);
+      return protocolSplitObjectsParams;
+    },
+    protocolWhereParamsAsString() {
+      const arrayFromFileProtocol = this.protocol
+        .split("Параметр")
+        .reduce((acc, item, i) => {
+          if (i === 0) return [];
+          const param = item
+            .split("\n")
+            .filter((item) => item != 0) //?????
+            .filter((item) => item.match(/№/) || item.match(/-?\d\d?.\d\d\d/))
+            .join(" ");
+          acc.push(param);
+          return acc;
+        }, []);
+      return arrayFromFileProtocol;
+    },
+  },
+  methods: {
+    handlerFileLoad(file) {
+      this.protocol = file;
+    },
+    createObjectParametr(arrayItem) {
+      // принимает строку-параметра и возвращает объект-параметр
+      let objectParametr = {};
+      let stringWithNumberPlusStatus = arrayItem.match(STRING_WITH_NUMBER_PLUS_STATUS);
+      objectParametr.number = Number(
+        arrayItem.match(NUMBER_STRING)[0].match(NUMBER_CLEAR)[0]
+      );
+      objectParametr.name = arrayItem
+        .match(NAME_STRING)[0]
+        .match(NAME_STRING_START)
+        .join("")
+        .trim();
+      objectParametr.nominal = stringWithNumberPlusStatus[2] || "";
+      objectParametr.rangePlus = Number(stringWithNumberPlusStatus[3]) || "";
+      objectParametr.rangeMinus = Number(stringWithNumberPlusStatus[4]) || "";
+      objectParametr.measure = Number(stringWithNumberPlusStatus[5]) || "";
+      objectParametr.deviance = stringWithNumberPlusStatus[6] || "";
+      objectParametr.pointMeasurment = stringWithNumberPlusStatus[7] || "";
+      objectParametr.status =
+        this.emojiStatus(stringWithNumberPlusStatus[8]) ||
+        this.emojiStatus(stringWithNumberPlusStatus[11]) ||
+        "↓";
+      objectParametr.percentDeviation = (objectParametr.deviance && +objectParametr.deviance > 0 ? (+objectParametr.deviance / +objectParametr.rangePlus) : (+objectParametr.deviance / +objectParametr.rangeMinus)) * 100;
+      return objectParametr;
+    },
+    emojiStatus(status) {
+      if (status === undefined) return;
+      const emoji = { ok: "✅", bad: "❌", else: "|" };
+      return status.trim() === "ГОДЕН" ? emoji.ok : emoji.bad;
+    },
+  },
+};
+</script>
+
+<style scoped>
+
+
+.app {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow-x: hidden;
+
+  --colorGood : hsl(120, 63%, 62%) ; 
+  --colorBad : hsl(20, 63%, 62%) ;
+  --colorWhiteBlue : hsla(205, 89%, 56%, 0.9);
+  --colorWhite : hsla(185, 91%, 91% , 0.8);
+  --colorDarkBlue : hsla(206, 86%, 27%, 0.8);
+}
+
+.app__container {
+  --widthAppContainer : 950px;
+  --navHeaderHeight : 80px;
+
+  width: var(--widthAppContainer);
+  margin: 0 auto;
+  border: 2px solid hsl(193, 36%, 85%);
+  background-color: hsla(221, 82%, 67%, 0.4);
+}
+</style>
