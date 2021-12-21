@@ -39,8 +39,9 @@
 </template>
 
 <script>
-//
 import { ROMAN_NUMS } from "../constants/constants";
+import { INPUT_EVENT } from "../constants/events";
+import { eventBus } from "../event-bus";
 
 export default {
   name: "nav-header",
@@ -53,6 +54,9 @@ export default {
       widthThumb: 15,
       widthRange: 0,
     };
+  },
+  created() {
+    eventBus.$on(INPUT_EVENT, this.resetCurrentValue);
   },
   mounted() {
     this.widthRange = +this.$refs.range.clientWidth;
@@ -84,15 +88,24 @@ export default {
   },
   methods: {
     handlerRangeInput(event) {
-      // this.changeCurrentValue(+event.target.value);
       this.$emit("moreThisPercent", +this.currentValue);
+      this.eventBusInputEvent();
     },
+
     gradationHandler(gradation) {
       this.changeCurrentValue(gradation);
     },
     changeCurrentValue(value) {
       this.currentValue = value;
       this.$emit("moreThisPercent", value);
+      this.eventBusInputEvent();
+    },
+    eventBusInputEvent() {
+      eventBus.$emit(INPUT_EVENT, { from: "nav-header" , value : 'continue'});
+    },
+    resetCurrentValue({ from  }) {
+      if (from === "nav-header") return;
+      this.currentValue = 0;
     },
   },
 };

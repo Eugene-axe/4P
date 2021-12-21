@@ -14,7 +14,12 @@
 </template>
 
 <script>
-import { FIND_NUMBER, SPLITTERS_FOR_TEXTAREA_NAVFOOTER } from '../../constants/regEx'
+import {
+  FIND_NUMBER,
+  SPLITTERS_FOR_TEXTAREA_NAVFOOTER,
+} from "../../constants/regEx";
+import { eventBus } from "../../event-bus";
+import { INPUT_EVENT } from '../../constants/events'
 
 export default {
   name: "area-numbers",
@@ -22,6 +27,9 @@ export default {
     return {
       textInput: "",
     };
+  },
+  created() {
+    eventBus.$on(INPUT_EVENT, this.changeFooterInputs);
   },
   methods: {
     handleAreaInput() {
@@ -31,7 +39,11 @@ export default {
       this.emitParametrsNumbers(arrayParametrs);
     },
     emitParametrsNumbers(numbers) {
-      this.$emit("inputEvent", numbers);
+      eventBus.$emit(INPUT_EVENT, { value: numbers, from: "area-numbers" });
+    },
+    changeFooterInputs({ from }) {
+      if (from === "area-numbers") return;
+      this.textInput = "";
     },
   },
 };

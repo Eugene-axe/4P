@@ -27,10 +27,6 @@ export default {
       type: Number,
       default: null,
     },
-    isActive : {
-      type : Boolean,
-      defaul: false,
-    }
   },
   data() {
     return {
@@ -53,11 +49,6 @@ export default {
       this.$emit("inputEvent", number > 0 ? [number] : []);
     },
   },
-  watch: {
-    isActive(){
-      this.number = this.isActive ? this.number : null;
-    }
-  }
 };
 </script>
 

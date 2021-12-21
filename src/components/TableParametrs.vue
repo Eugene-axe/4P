@@ -21,7 +21,7 @@
     </div>
     <nav-footer>
       <template v-slot:oneNumber>
-        <one-number @inputEvent="acceptParametrsNumbers" @click.native="reset" />
+        <one-number @inputEvent="acceptParametrsNumbers" />
       </template>
       <template v-slot:rangeNumber>
         <range-numbers @inputEvent="acceptParametrsNumbers" />
@@ -41,6 +41,7 @@ import NavFooter from "./NavFooter/NavFooter.vue";
 import OneNumber from "./NavFooter/OneNumber.vue";
 import RangeNumbers from "./NavFooter/RangeNumbers.vue";
 import AreaNumbers from "./NavFooter/AreaNumbers.vue";
+import { eventBus } from "../event-bus";
 
 export default {
   name: "table-parametrs",
@@ -68,6 +69,9 @@ export default {
         "textarea-numbers": "3",
       },
     };
+  },
+  created() {
+    eventBus.$on('inputEvent' , this.acceptParametrsNumbers );
   },
   mounted() {
     this.filteredParametrs = this.parametrs;
@@ -117,7 +121,9 @@ export default {
         (parametr) => parametr.percentDeviation > deviance
       );
     },
-    acceptParametrsNumbers(numbers) {
+    acceptParametrsNumbers({value : numbers}) {
+      if (numbers === 'continue') return;
+      // let numbers = value;
       const actions = {
         0: () => {
           this.filteredParametrs = this.parametrs;

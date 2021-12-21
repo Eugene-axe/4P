@@ -1,16 +1,18 @@
 <template>
   <div class="input-field range-numbers">
     <p>Диапазон параметров</p>
-    <input-number :defaultValue="from" @inputEvent="acceptValueFrom"
+    <input-number  @inputEvent="acceptValueFrom"
       >От :
     </input-number>
-    <input-number :defaultValue="to" @inputEvent="acceptValueTo">
+    <input-number  @inputEvent="acceptValueTo">
       До :
     </input-number>
   </div>
 </template>
 
 <script>
+import { INPUT_EVENT } from '../../constants/events';
+import { eventBus } from "../../event-bus";
 import InputNumber from "./InputNumber.vue";
 
 export default {
@@ -20,9 +22,12 @@ export default {
   },
   data() {
     return {
-      to: 9999,
-      from: 1,
+      to: null,
+      from: null,
     };
+  },
+  created() {
+    eventBus.$on(INPUT_EVENT, this.changeFooterInputs);
   },
   methods: {
     acceptValueFrom(value) {
@@ -34,12 +39,17 @@ export default {
       this.handleRangeInput();
     },
     handleRangeInput() {
-      if (this.to > this.from) {
-        this.$emit("inputEvent", [this.from, this.to]);
-      } else {
-        this.$emit("inputEvent", [this.to, this.from]);
-      }
+      let to = this.to > this.from ? this.to : this.from;
+      let from = this.to > this.from ? this.from : this.to;
+
+      eventBus.$emit(INPUT_EVENT, {value : [from, to] , from: 'range-numbers'});
     },
+    changeFooterInputs({from}){
+      if (from === 'range-numbers') return;
+      this.$children.forEach( child => {
+        if (child.$el.classList.contains('input-number')) child.$data.number = "";
+      })
+    }
   },
 };
 </script>
