@@ -4,7 +4,7 @@
     :style="rowStyle"
     :class="{
       hide: isBirth || parametr.hide,
-      scale : scale,
+      scale: scale,
     }"
     @click="handleClick"
   >
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { CAP_TITLES } from "../constants/constants";
+import { CAP_TITLES, EMOJI_STATUS } from "../constants/constants";
 
 export default {
   name: "table-row",
@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       isBirth: true,
-      scale : false,
+      scale: false,
     };
   },
   mounted() {
@@ -49,6 +49,12 @@ export default {
       return Object.keys(CAP_TITLES);
     },
     colorDeviation() {
+      if (this.parametr.status === EMOJI_STATUS.bad) return 20;
+      if (
+        this.parametr.status === EMOJI_STATUS.other &&
+        this.parametr.deviance === ""
+      )
+        return 200;
       return this.parametr.percentDeviation < 100
         ? 120 - Math.ceil(this.parametr.percentDeviation)
         : 20;
@@ -59,28 +65,31 @@ export default {
       };
     },
   },
-  methods:{
-      handleClick(){
-          this.scale = !this.scale;
-      }
+  methods: {
+    handleClick() {
+      this.scale = !this.scale;
+    },
   },
 };
 </script>
 
 <style scoped>
 .table-row {
-  padding: 0.2em 0 ;
+  padding: 0.2em 0;
   transition: all 0.5s ease-out;
 }
+.table-row:last-child {
+  margin-bottom: 25px;
+}
 .table-row:hover {
-    position: relative;
-    transform: scale(1.05);
+  position: relative;
+  transform: scale(1.05);
 }
 .hide {
   opacity: 0.2;
   border: none;
 }
 .scale {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 </style>

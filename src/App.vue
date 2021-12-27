@@ -20,6 +20,7 @@ import {
 } from "./constants/regEx";
 import DropZone from "./components/DropZone.vue";
 import TableParametrs from "./components/TableParametrs.vue";
+import { EMOJI_STATUS } from './constants/constants';
 
 export default {
   name: "vue-comp",
@@ -71,44 +72,54 @@ export default {
     },
     createObjectParametr(arrayItem) {
       // принимает строку-параметра и возвращает объект-параметр
-      let objectParametr = {};
-      let stringWithNumberPlusStatus = arrayItem.match(
+      const stringWithNumberPlusStatus = arrayItem.match(
         STRING_WITH_NUMBER_PLUS_STATUS
       );
-      objectParametr.number = Number(
+      const number = Number(
         arrayItem.match(NUMBER_STRING)[0].match(NUMBER_CLEAR)[0]
       );
-      objectParametr.name = arrayItem
+      const name = arrayItem
         .match(NAME_STRING)[0]
         .match(NAME_STRING_START)
         .join("")
         .trim();
-      objectParametr.nominal = stringWithNumberPlusStatus[2] || "";
-      objectParametr.rangePlus = Number(stringWithNumberPlusStatus[3]) || "";
-      objectParametr.rangeMinus = Number(stringWithNumberPlusStatus[4]) || "";
-      objectParametr.measure = Number(stringWithNumberPlusStatus[5]) || "";
-      objectParametr.deviance = stringWithNumberPlusStatus[6] || "";
-      objectParametr.pointMeasurment = stringWithNumberPlusStatus[7] || "";
-      objectParametr.status =
+      const nominal = stringWithNumberPlusStatus[2] || "";
+      const rangePlus = Number(stringWithNumberPlusStatus[3]) || "";
+      const rangeMinus = Number(stringWithNumberPlusStatus[4]) || "";
+      const measure = Number(stringWithNumberPlusStatus[5]) || "";
+      const deviance = stringWithNumberPlusStatus[6] || "";
+      const pointMeasurment = stringWithNumberPlusStatus[7] || "";
+      const status =
         this.emojiStatus(stringWithNumberPlusStatus[8]) ||
         this.emojiStatus(stringWithNumberPlusStatus[11]) ||
-        "↓";
-      objectParametr.percentDeviation =
-        (objectParametr.deviance && +objectParametr.deviance > 0
-          ? +objectParametr.deviance / +objectParametr.rangePlus
-          : +objectParametr.deviance / +objectParametr.rangeMinus) * 100;
+        EMOJI_STATUS.other;
+      let percentDeviation = null;
+      if ( deviance === '' && status !== null ) percentDeviation = status === EMOJI_STATUS.ok ? 0 : 100;
+      else {
+        percentDeviation = +deviance > 0 ? deviance/rangePlus*100 : deviance/rangeMinus*100;
+      } 
+      const objectParametr = {
+        number,
+        name,
+        nominal,
+        rangePlus,
+        rangeMinus,
+        measure,
+        deviance,
+        pointMeasurment,
+        status,
+        percentDeviation,
+      };
       return objectParametr;
     },
     emojiStatus(status) {
       if (status === undefined) return;
-      const emoji = { ok: "✅", bad: "❌", else: "|" };
-      return status.trim() === "ГОДЕН" ? emoji.ok : emoji.bad;
+      return status.trim() === "ГОДЕН" ? EMOJI_STATUS.ok : EMOJI_STATUS.bad;
     },
-    destroyProtocol(){
-    this.protocol = '';
-  }
+    destroyProtocol() {
+      this.protocol = "";
+    },
   },
-  
 };
 </script>
 

@@ -126,6 +126,7 @@ export default {
   align-items: center;
   background-color: var(--colorWhiteBlue);
   color: var(--colorDarkBlue);
+  z-index: 2;
 }
 .nav-range {
   flex: 1;

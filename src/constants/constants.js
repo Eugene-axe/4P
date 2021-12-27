@@ -10,12 +10,18 @@ export const CAP_TITLES = {
 };
 
 export const ROMAN_NUMS = {
-  0: {roman: "I"},
-  1: {roman: "II"},
-  2: {roman: "III"},
-  3: {roman: "IV"},
-  4: {roman: "V"},
-  5: {roman: "VI"},
-  6: {roman: "VII"},
-  7: {roman: "VIII"},
+  0: { roman: "I" },
+  1: { roman: "II" },
+  2: { roman: "III" },
+  3: { roman: "IV" },
+  4: { roman: "V" },
+  5: { roman: "VI" },
+  6: { roman: "VII" },
+  7: { roman: "VIII" },
+};
+
+export const EMOJI_STATUS = {
+  ok: "✓",
+  bad: "✖",
+  other: "○",
 };

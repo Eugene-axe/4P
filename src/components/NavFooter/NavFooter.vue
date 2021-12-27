@@ -14,7 +14,7 @@ export default {
   name: "nav-footer",
   data() {
     return {
-      isOpen: true,
+      isOpen: false,
     };
   },
   computed: {},
@@ -41,6 +41,10 @@ export default {
   border-top-left-radius: 1em;
   border-top-right-radius: 1em;
   transition: bottom 0.4s ease;
+  z-index: 2;
+}
+.nav-footer.hide:hover {
+  bottom: -70px;
 }
 .hide {
   bottom: -80px;
