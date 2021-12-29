@@ -40,7 +40,7 @@
 
 <script>
 import { ROMAN_NUMS } from "../constants/constants";
-import { INPUT_EVENT } from "../constants/events";
+import { CLEAR_OTHER_INPUT} from "../constants/events";
 import { eventBus } from "../event-bus";
 
 export default {
@@ -56,7 +56,7 @@ export default {
     };
   },
   created() {
-    eventBus.$on(INPUT_EVENT, this.resetCurrentValue);
+    eventBus.$on(CLEAR_OTHER_INPUT, this.resetCurrentValue);
   },
   mounted() {
     this.widthRange = +this.$refs.range.clientWidth;
@@ -101,7 +101,7 @@ export default {
       this.eventBusInputEvent();
     },
     eventBusInputEvent() {
-      eventBus.$emit(INPUT_EVENT, { from: "nav-header" , value : 'continue'});
+      eventBus.$emit(CLEAR_OTHER_INPUT, { from: "nav-header"});
     },
     resetCurrentValue({ from  }) {
       if (from === "nav-header") return;

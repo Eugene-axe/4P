@@ -43,8 +43,8 @@ export default {
     },
     parametrs() {
       const protocolSplitObjectsParams =
-        this.protocolWhereParamsAsString.reduce((acc, item) => {
-          const objParametr = this.createObjectParametr(item);
+        this.protocolWhereParamsAsString.reduce((acc, item , i) => {
+          const objParametr = this.createObjectParametr(item ,i);
           acc.push(objParametr);
           return acc;
         }, []);
@@ -70,7 +70,7 @@ export default {
     handlerFileLoad(file) {
       this.protocol = file;
     },
-    createObjectParametr(arrayItem) {
+    createObjectParametr(arrayItem , i) {
       // принимает строку-параметра и возвращает объект-параметр
       const stringWithNumberPlusStatus = arrayItem.match(
         STRING_WITH_NUMBER_PLUS_STATUS
@@ -99,6 +99,7 @@ export default {
         percentDeviation = +deviance > 0 ? deviance/rangePlus*100 : deviance/rangeMinus*100;
       } 
       const objectParametr = {
+        key : i,
         number,
         name,
         nominal,

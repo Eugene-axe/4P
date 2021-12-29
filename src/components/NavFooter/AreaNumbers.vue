@@ -19,7 +19,7 @@ import {
   SPLITTERS_FOR_TEXTAREA_NAVFOOTER,
 } from "../../constants/regEx";
 import { eventBus } from "../../event-bus";
-import { INPUT_EVENT } from '../../constants/events'
+import { CLEAR_OTHER_INPUT } from '../../constants/events'
 
 export default {
   name: "area-numbers",
@@ -29,7 +29,7 @@ export default {
     };
   },
   created() {
-    eventBus.$on(INPUT_EVENT, this.changeFooterInputs);
+    eventBus.$on(CLEAR_OTHER_INPUT, this.changeFooterInputs);
   },
   methods: {
     handleAreaInput() {
@@ -39,7 +39,8 @@ export default {
       this.emitParametrsNumbers(arrayParametrs);
     },
     emitParametrsNumbers(numbers) {
-      eventBus.$emit(INPUT_EVENT, { value: numbers, from: "area-numbers" });
+      this.$emit('inputEvent', numbers);
+      eventBus.$emit(CLEAR_OTHER_INPUT, {from: "area-numbers" });
     },
     changeFooterInputs({ from }) {
       if (from === "area-numbers") return;

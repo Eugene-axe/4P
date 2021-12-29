@@ -10,7 +10,7 @@
 <script>
 import InputNumber from "./InputNumber.vue";
 import {eventBus} from "../../event-bus";
-import { INPUT_EVENT } from '../../constants/events';
+import { CLEAR_OTHER_INPUT } from '../../constants/events';
 
 export default {
   name: "one-number",
@@ -24,15 +24,15 @@ export default {
     }
   },
   created() {
-    eventBus.$on(INPUT_EVENT, this.changeFooterInputs);
+    eventBus.$on(CLEAR_OTHER_INPUT, this.changeFooterInputs);
   },
   methods: {
     nandleInputNumber(value) {
       this.emitNumber(value);
     },
     emitNumber(value){
-      // this.$emit('inputEvent' , value);
-      eventBus.$emit(INPUT_EVENT , {value , from : 'one-number'})      
+      this.$emit('inputEvent' , value);
+      eventBus.$emit(CLEAR_OTHER_INPUT , {from : 'one-number'})      
     },
     changeFooterInputs({from}){
       if ( from === 'one-number') return;

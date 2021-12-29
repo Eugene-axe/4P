@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { INPUT_EVENT } from '../../constants/events';
+import { CLEAR_OTHER_INPUT, INPUT_EVENT } from '../../constants/events';
 import { eventBus } from "../../event-bus";
 import InputNumber from "./InputNumber.vue";
 
@@ -27,7 +27,7 @@ export default {
     };
   },
   created() {
-    eventBus.$on(INPUT_EVENT, this.changeFooterInputs);
+    eventBus.$on(CLEAR_OTHER_INPUT, this.changeFooterInputs);
   },
   methods: {
     acceptValueFrom(value) {
@@ -41,8 +41,8 @@ export default {
     handleRangeInput() {
       let to = this.to > this.from ? this.to : this.from;
       let from = this.to > this.from ? this.from : this.to;
-
-      eventBus.$emit(INPUT_EVENT, {value : [from, to] , from: 'range-numbers'});
+      this.$emit('inputEvent' , [from , to] );
+      eventBus.$emit(CLEAR_OTHER_INPUT, { from: 'range-numbers'});
     },
     changeFooterInputs({from}){
       if (from === 'range-numbers') return;

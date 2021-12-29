@@ -14,7 +14,7 @@
       <div class="table-rows">
         <table-row
           v-for="parametr in filteredParametrs"
-          :key="parametr.number + '_' + randomKey()"
+          :key="parametr.key"
           :parametr="parametr"
         />
       </div>
@@ -41,8 +41,6 @@ import NavFooter from "./NavFooter/NavFooter.vue";
 import OneNumber from "./NavFooter/OneNumber.vue";
 import RangeNumbers from "./NavFooter/RangeNumbers.vue";
 import AreaNumbers from "./NavFooter/AreaNumbers.vue";
-import { eventBus } from "../event-bus";
-import { randomKey } from "../utils";
 
 export default {
   name: "table-parametrs",
@@ -70,9 +68,6 @@ export default {
         "textarea-numbers": "3",
       },
     };
-  },
-  created() {
-    eventBus.$on("inputEvent", this.acceptParametrsNumbers);
   },
   mounted() {
     this.filteredParametrs = this.parametrs;
@@ -122,9 +117,8 @@ export default {
         (parametr) => parametr.percentDeviation > deviance
       );
     },
-    acceptParametrsNumbers({ value: numbers }) {
-      if (numbers === "continue") return;
-      // let numbers = value;
+    acceptParametrsNumbers(numbers) {
+      console.log('acceptParametrsNumbers' , numbers);
       const actions = {
         0: () => {
           this.filteredParametrs = this.parametrs;
@@ -150,9 +144,6 @@ export default {
         },
       };
       actions[numbers.length > 2 ? 3 : numbers.length]();
-    },
-    randomKey() {
-      return randomKey();
     },
   },
 };
