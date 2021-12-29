@@ -1,7 +1,7 @@
 <template>
-  <div class="table-container">
+  <div class="table-container viewport" :style="viewportStyle">
     <nav-header @moreThisPercent="acceptDeviance" />
-    <div class="table-parametrs">
+    <div class="table-parametrs spacer" :style="spacerStyle">
       <div class="table-cap table-row">
         <div
           v-for="title in Object.keys(capTitles)"
@@ -13,7 +13,7 @@
       </div>
       <div class="table-rows">
         <table-row
-          v-for="parametr in filteredParametrs"
+          v-for="parametr in visibleItems"
           :key="parametr.key"
           :parametr="parametr"
         />
@@ -62,20 +62,56 @@ export default {
     return {
       filteredParametrs: [],
       deviance: 0,
-      inputFieldKeys: {
-        "one-number": "1",
-        "range-numbers": "2",
-        "textarea-numbers": "3",
-      },
+      rowHeight: 22,
+      scrollTop : 0,
+      nodePadding : 30,
     };
   },
   mounted() {
     this.filteredParametrs = this.parametrs;
+    //for virtualScroll 
+    document.querySelector('.app').addEventListener('scroll' , this.handleScroll);
+  },
+  destroyed(){
+    document.querySelector('.app').removeEventListener('scroll' , this.handleScroll);
   },
   computed: {
     capTitles() {
       return CAP_TITLES;
     },
+    // for virtualScroll
+    itemCount(){
+      return this.filteredParametrs.length;
+    },
+    viewportHeight(){
+      return (this.itemCount+2)*this.rowHeight;
+    },
+    startIndex(){
+      const startNode = Math.floor( this.scrollTop / this.rowHeight) - this.nodePadding;
+      return Math.max(0 , startNode);
+    },
+    visibleNodeCount(){
+      const count = Math.ceil( document.querySelector('.app').clientHeight / this.rowHeight + 2 * this.nodePadding);
+      return Math.min(this.itemCount - this.startIndex , count);
+    },
+    visibleItems(){
+      return this.filteredParametrs.slice( this.startIndex , this.startIndex + this.visibleNodeCount);
+    },
+    offsetY(){
+      return this.startIndex * this.rowHeight;
+    },
+    spacerStyle(){
+      return {
+        transform : `translateY(${this.offsetY}px)`
+      }
+    },
+    viewportStyle(){
+      return {
+        height: `${this.viewportHeight}px`,
+        position: `relative`,
+      }
+    }
+    // end for virtualScroll
   },
   methods: {
     acceptDeviance(deviance) {
@@ -145,6 +181,10 @@ export default {
       };
       actions[numbers.length > 2 ? 3 : numbers.length]();
     },
+    //for VirtualScroll 
+    handleScroll(event){
+      this.scrollTop = document.querySelector('.app').scrollTop;
+    }
   },
 };
 </script>

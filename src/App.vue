@@ -148,7 +148,8 @@ export default {
 
   width: var(--widthAppContainer);
   margin: 0 auto;
-  border: 2px solid hsl(193, 36%, 85%);
+  border: 2px solid var(--colorWhite);
+  border-bottom: none;
   background-color: hsla(221, 82%, 67%, 0.4);
 }
 
