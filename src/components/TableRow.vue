@@ -12,7 +12,9 @@
       v-for="colName in colNames"
       :key="colName"
       class="td"
-      :class="colName"
+      :class="[colName, {
+        'fontsize-small' : parametr[colName].length >= 70 ,
+         } ]"
       :style="rowStyle"
       v-text="parametr[colName]"
     ></div>
@@ -75,7 +77,8 @@ export default {
 
 <style scoped>
 .table-row {
-  padding: 0.2em 0;
+  height: 22px;
+  padding: 3px 0;
   transition: all 0.5s ease-out;
 }
 .table-row:last-child {
@@ -91,5 +94,8 @@ export default {
 }
 .scale {
   transform: scale(1.05);
+}
+.fontsize-small {
+  font-size: 0.7em;
 }
 </style>

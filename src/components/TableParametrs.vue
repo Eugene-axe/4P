@@ -168,7 +168,6 @@ export default {
 .table-parametrs >>> .table-row {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
 }
 .table-cap {
   font-weight: bold;
@@ -180,9 +179,12 @@ export default {
 .table-row:last-child {
   border: none;
 }
+.table-row .th {
+  font-size: 0.9em;
+}
 .table-row .th,
 .table-row >>> .td {
-  flex-basis: 100px;
+  flex-basis: 85px;
   width: 100%;
   text-align: center;
   border-right: 1px solid var(--colorDarkBlue);
@@ -194,12 +196,18 @@ export default {
 }
 .table-row .th.name,
 .table-row >>> .td.name {
-  flex-basis: 300px;
+  flex: 1;
   overflow: hidden;
 }
 .table-row .th.number,
 .table-row >>> .td.number {
   flex-basis: 40px;
+}
+.table-row .th.rangePlus,
+.table-row >>> .td.rangePlus,
+.table-row .th.rangeMinus,
+.table-row >>> .td.rangeMinus {
+  flex-basis: 70px;
 }
 .table-row .th.status,
 .table-row >>> .td.status {
