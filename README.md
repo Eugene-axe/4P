@@ -6,4 +6,4 @@ The application has the following functionality:
 - display of elements depending on the percentage deviation
 - virtual scrolling
 
-To test the application, open the link and using the file test_manyrows.txt follow the prompts of the application.
+To test the application, open the link https://eugene-axe.github.io/4P/ and using the file test_manyrows.txt follow the prompts of the application.
