@@ -4,6 +4,6 @@ The application has the following functionality:
 - search by parameter range
 - search by specified parameter numbers
 - display of elements depending on the percentage deviation
-- - virtual scrolling
+- virtual scrolling
 
 To test the application, open the link and using the file test_manyrows.txt follow the prompts of the application.
