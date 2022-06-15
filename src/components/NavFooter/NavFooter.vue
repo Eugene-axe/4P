@@ -1,10 +1,10 @@
 <template>
   <div class="nav-footer" :class="{ hide: !isOpen }">
     <div class="button-arrow" @click="openNav">{{ isOpen ? "▼" : "▲" }}</div>
-    <div class="navigation-number">    
+    <div class="navigation-number">
       <slot name="oneNumber"></slot>
       <slot name="rangeNumber"></slot>
-      <slot name="areaNumbers"></slot>      
+      <slot name="areaNumbers"></slot>
     </div>
   </div>
 </template>
@@ -55,9 +55,9 @@ export default {
   color: var(--colorWhiteBlue);
   text-align: center;
   cursor: pointer;
-  font-size: 0.6em;
-  border-top-left-radius: 1em;
-  border-top-right-radius: 1em;
+  font-size: 1em;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
 }
 .navigation-number {
   display: flex;
@@ -79,5 +79,17 @@ export default {
     transparent 80%,
     transparent
   );
+}
+
+@media (max-width: 700px) {
+  .hide {
+    bottom: -50px;
+  }
+  .nav-footer {
+    font-size: 1.5em;
+  }
+  .button-arrow {
+    font-size: 1.2em;
+  }
 }
 </style>
