@@ -1,9 +1,17 @@
-This application makes it more accessible to read a large protocol (about a thousand parameters) issued by the control program of a certain product.
-The application has the following functionality:
-- search by parameter number
-- search by parameter range
-- search by specified parameter numbers
-- display of elements depending on the percentage deviation
-- virtual scrolling
+# П.О.П.О.Х.
+## Программа обработки протокола основных характеристик
 
-To test the application, open the link https://eugene-axe.github.io/4P/ and using the file test_manyrows.txt follow the prompts of the application.
+Это приложение делает визуально доступным чтение многострочного протокола (около тысячи параметров), выдаваемого программой контроля специального продуктав, в _.txt_ формате. 
+
+На старте приложение предлагает dropzone, которая позволяет перносом или кликом загрузить .txt файл протокола в приложение.
+По событию загрузки файла итенрфейс меняется на две панели навигации и таблицу параметров:
+
+- Верхняя панель навигации предоставляет два элемента управления, которые отвечают за отображение в таблице параметров с определенным диапазоном процентоного отклонения.
+
+- Нижняя панель навигации предоставляет три элемента поиска параметров по номерам : одного, диапазона, выборочного списка. Эта панель умеет валидировать свои поля.
+
+- Таблица параметров, состоит из строк в которых указана основная информация о параметре. Строка имеет цвет фона зависимый от процентного отклонения. Для ускорения работы приложения применен способ Virtual Scroll вывода строк таблицы.
+
+***
+
+Для тестирования откройте приложение по [ссылке](https://eugene-axe.github.io/4P/) и следуйте указаниям приложения. Для теста спользуйте файл **"test_manyrows.txt"** из репозитроия.
